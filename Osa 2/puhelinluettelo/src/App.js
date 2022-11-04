@@ -38,10 +38,7 @@ const App = () => {
 
   const handleFilterFieldChange = (event) => setNumberFilter(event.target.value)
 
-  function filterNameList() {
-    let contactsIn
-    return persons.filter(contact => contact.name.toLocaleLowerCase().includes(filterField.toLowerCase()))
-  }
+  const filterNameList = () => persons.filter(contact => contact.name.toLocaleLowerCase().includes(filterField.toLowerCase()));
 
   return (
     <div>
