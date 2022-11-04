@@ -2,7 +2,6 @@ const Numbers = ({numbers}) => {
 
     return (
     <>
-        <h2>Numbers</h2>
         <div>
         {numbers.map(person =>
         <Person key={person.id} person={person.name} number={person.number} />
