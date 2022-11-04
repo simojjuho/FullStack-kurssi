@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Numbers from './components/Numbers'
+import AddNumber from './components/AddNumber'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -36,21 +37,12 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addContact}>
-        <div>
-          name: <input 
-                  value={newName}
-                  onChange={handleNameFieldChange} 
-                /><br />
-          number: <input
-                  value={newNumber}
-                  onChange={handleNumberFieldChange}
-                />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <AddNumber 
+        handleNameFieldChange = {handleNameFieldChange} 
+        handleNumberFieldChange = {handleNumberFieldChange} 
+        addContact={addContact}
+        newName = {newName}
+        newNumber={newNumber}/>
       <div>
         <Numbers numbers={persons}/>
       </div>
