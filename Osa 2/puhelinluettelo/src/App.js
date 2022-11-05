@@ -1,19 +1,21 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Numbers from './components/Numbers'
 import AddNumber from './components/AddNumber'
 import NumberFilter from './components/NumberFilter'
+import axios from 'axios'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { id: 1, name: 'Arto Hellas', number: '040-123456' },
-    { id: 2, name: 'Ada Lovelace', number: '39-44-5323523' },
-    { id: 3, name: 'Dan Abramov', number: '12-43-234345' },
-    { id: 4, name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterField, setNumberFilter] = useState('')
 
+  useEffect(()=> {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => setPersons(response.data))
+  },[])
+ 
   const addContact = (event) => {
     event.preventDefault()
     const contactObject = {
