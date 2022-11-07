@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react';
 import axios from 'axios'
 import ShowCountries from './components/ShowCountries'
 import Input from './components/Input';
+import ShowCountryInfo from './components/ShowCountry';
 
 function App() {
 
@@ -21,8 +22,10 @@ function App() {
   return (
     <div>
       <Input inputText={inputText} handleInputTextChange={handleInputTextChange}/>
-      {(filterCountries().length > 10) ? <p>Too many countries, specify more!</p>
-      :<ShowCountries countries={filterCountries()} />}
+      {(filterCountries().length > 10)  ? <p>Too many countries, specify more!</p>
+      : filterCountries().length > 1    ? <ShowCountries countries={filterCountries()} />
+      : filterCountries().length == 1   ? <ShowCountryInfo country={filterCountries()[0]}/>
+      : <p>No countries to show!</p>}
     </div>
 
   );
@@ -31,3 +34,4 @@ function App() {
 export default App;
 
 
+ 
