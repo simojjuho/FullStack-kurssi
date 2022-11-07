@@ -6,7 +6,7 @@ const ShowCountryInfo = ({country}) => {
             <p>Area: {country.area}</p>
             <h4>Languages</h4>
             <ul>
-            {Object.values(country.languages).map(language => <Language language={language}/>)}                
+            {Object.values(country.languages).map(language => <Language key={language} language={language}/>)}                
             </ul>
             <Flag country={country} />
         </div>
@@ -15,6 +15,6 @@ const ShowCountryInfo = ({country}) => {
 
 export default ShowCountryInfo
 
-const Language = ({language}) => <li key={language.key}>{language}</li>
+const Language = ({language}) => <li >{language}</li>
 
 const Flag = ({country}) => <><img src={country.flags.png} /></>
