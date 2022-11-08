@@ -16,19 +16,22 @@ const App = () => {
       .then(response => setPersons(response.data))
   },[])
  
-  const addContact = (event) => {
+  const addContact = event => {
     event.preventDefault()
     const contactObject = {
-      id: persons.length + 1,
       name: newName,
       number: newNumber
     }
     if (persons.some(element => element.name === newName)) {
       alreadyAdded(contactObject.name)
     } else {
-      setPersons(persons.concat(contactObject))
-      setNewName('')
-      setNewNumber('')
+      axios
+        .post('http://localhost:3001/persons', contactObject)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          setNewName('')
+          setNewNumber('')
+        })
     }
   }
 
