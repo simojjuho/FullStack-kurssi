@@ -3,16 +3,27 @@ import ShowNumbers from './components/ShowNumbers'
 import AddNumber from './components/AddNumber'
 import NumberFilter from './components/NumberFilter'
 import numbersService from './services/numbers'
+import Feedback from './components/Feedback'
+import Error from './components/Error'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterField, setNumberFilter] = useState('')
+  const [feedBackMessage, setFeedbackMessage] = useState(null)
+  const [errorMsg, setErrorMsg] = useState(null)
 
   useEffect(()=> {
     numbersService.getAll()
-      .then(returnedNumbers => setPersons(returnedNumbers.data))
+      .then(returnedNumbers => {
+        setPersons(returnedNumbers.data)
+        nullFeedbackMessage()
+      })
+      .catch(error => {
+        setErrorMsg(`Yhteystietojen noutaminen palvelimelta ei onnistunut!`)
+        nullErrorMsg()
+      })
   },[])
  
   //Lisätään kontaksti. Jos lisättävä nimi on jo olemassa, kutsutaan updateContact() -funktiota.
@@ -28,8 +39,14 @@ const App = () => {
       numbersService.createContact(contactObject)
         .then(returnedNumbers => {
           setPersons(persons.concat(returnedNumbers))
+          setFeedbackMessage(`Yhteystieto ${contactObject.name}: ${contactObject.number} lisättiin onnistuneesti palvelimelle!`)
+          nullFeedbackMessage()
           setNewName('')
           setNewNumber('')
+        })
+        .catch(error => {
+          setErrorMsg(`Yhteystiedon ${contactObject.name}: ${contactObject.number} lisääminen palvelimelle ei onnistunut.`)
+          nullErrorMsg()
         })
     }
   }
@@ -38,10 +55,14 @@ const App = () => {
     if(window.confirm(`Haluatko varmasti poistaa ${id}: ${name} yhteystiedoista?`)){    
       numbersService.deleteContact(id)  
         .then(() => {
-          window.alert(`Yhteystieto ${id}: ${name} on poistettu`)
-          setPersons(persons.filter(person => person.id !== id))})
+          setPersons(persons.filter(person => person.id !== id))
+          setFeedbackMessage(`Yhteystieto ${id}: ${name} on poistettu`)
+          nullFeedbackMessage()
+        })
         .catch(error => {
           console.log('Yhteystietoa ei löytynyt palvelimelta')
+          setErrorMsg(`Yhteystietoa ei löytynyt palvelimelta`)
+          nullErrorMsg()
           setPersons(persons.filter(person => person.id !== id))
         })
         
@@ -54,21 +75,29 @@ const App = () => {
     if(window.confirm(`Haluatko varmasti päivittää yhteystiedon?`)) {
       numbersService.update(person.id, newContact)
         .then(returnedNumber => {
-          console.log(returnedNumber)
           setPersons(persons.map(contact => contact.id !== person.id ? contact : returnedNumber))
-          console.log(`Yhteystiedo ID:llä ${person.id} on päivitetty.`)
+          setFeedbackMessage(`Yhteystiedo ID:llä ${person.id} on päivitetty.`)
+          nullFeedbackMessage()
+        })
+        .catch(error =>{
+          setErrorMsg(`Yhteystiedon päivitys ei onnistunut!`)
+          nullErrorMsg()
         })
     }
   }
+
+  //Viiveen jälkeen viestikenttä poistetaan
+  const nullFeedbackMessage = () => setTimeout(() => setFeedbackMessage(null), 5000)
+
+
+  const nullErrorMsg = () => setTimeout(() => setErrorMsg(null), 5000)
+
 
   //Käsittelee namefield-kentän muutoksen
   const handleNameFieldChange = (event) => setNewName(event.target.value)
 
   //Käsittelee numberfield-kentän muutoksen
   const handleNumberFieldChange = (event) => setNewNumber(event.target.value)
-
-  //Jos numero on jo lisätty, näytetään hälytys.
-  const alreadyAdded = (person) => alert(`${person} already added to the contact list!`)
 
   //Suodatin-kentän käsittely
   const handleFilterFieldChange = (event) => setNumberFilter(event.target.value)
@@ -79,6 +108,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Feedback feedback={feedBackMessage}/>
+      <Error errorMsg={errorMsg}/>
       <h3>Add a contact</h3>
       <AddNumber
         handleNameFieldChange={handleNameFieldChange}
