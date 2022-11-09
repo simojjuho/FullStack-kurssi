@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import Numbers from './components/Numbers'
+import ShowNumbers from './components/ShowNumbers'
 import AddNumber from './components/AddNumber'
 import NumberFilter from './components/NumberFilter'
-import axios from 'axios'
+import numbersService from './services/numbers'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,11 +11,11 @@ const App = () => {
   const [filterField, setNumberFilter] = useState('')
 
   useEffect(()=> {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => setPersons(response.data))
+    numbersService.getAll()
+      .then(returnedNumbers => setPersons(returnedNumbers.data))
   },[])
  
+  //Lisätään kontaksti. Jos lisättävä nimi on jo olemassa, kutsutaan updateContact() -funktiota.
   const addContact = event => {
     event.preventDefault()
     const contactObject = {
@@ -23,27 +23,58 @@ const App = () => {
       number: newNumber
     }
     if (persons.some(element => element.name === newName)) {
-      alreadyAdded(contactObject.name)
+      updateContact(persons.find(person => person.name === contactObject.name), contactObject)
     } else {
-      axios
-        .post('http://localhost:3001/persons', contactObject)
-        .then(response => {
-          setPersons(persons.concat(response.data))
+      numbersService.createContact(contactObject)
+        .then(returnedNumbers => {
+          setPersons(persons.concat(returnedNumbers))
           setNewName('')
           setNewNumber('')
         })
     }
   }
 
+  const removeContact = (id, name) => {
+    if(window.confirm(`Haluatko varmasti poistaa ${id}: ${name} yhteystiedoista?`)){    
+      numbersService.deleteContact(id)  
+        .then(() => {
+          window.alert(`Yhteystieto ${id}: ${name} on poistettu`)
+          setPersons(persons.filter(person => person.id !== id))})
+        .catch(error => {
+          console.log('Yhteystietoa ei löytynyt palvelimelta')
+          setPersons(persons.filter(person => person.id !== id))
+        })
+        
+      }    
+  }
+
+
+
+  const updateContact = (person, newContact) => {
+    if(window.confirm(`Haluatko varmasti päivittää yhteystiedon?`)) {
+      numbersService.update(person.id, newContact)
+        .then(returnedNumber => {
+          console.log(returnedNumber)
+          setPersons(persons.map(contact => contact.id !== person.id ? contact : returnedNumber))
+          console.log(`Yhteystiedo ID:llä ${person.id} on päivitetty.`)
+        })
+    }
+  }
+
+  //Käsittelee namefield-kentän muutoksen
   const handleNameFieldChange = (event) => setNewName(event.target.value)
 
+  //Käsittelee numberfield-kentän muutoksen
   const handleNumberFieldChange = (event) => setNewNumber(event.target.value)
 
+  //Jos numero on jo lisätty, näytetään hälytys.
   const alreadyAdded = (person) => alert(`${person} already added to the contact list!`)
 
+  //Suodatin-kentän käsittely
   const handleFilterFieldChange = (event) => setNumberFilter(event.target.value)
 
-  const filterNameList = () => persons.filter(contact => contact.name.toLocaleLowerCase().includes(filterField.toLowerCase()));
+  //Palauttaa taulukon, jossa on vain suodatetut yhteystiedot.
+  const filterNameList = () => persons.filter(contact => contact.name.toLowerCase().includes(filterField.toLowerCase()))
 
   return (
     <div>
@@ -60,7 +91,7 @@ const App = () => {
         <NumberFilter filterField={filterField} handleFilterFieldChange={handleFilterFieldChange} />
         <h3>Numbers</h3>
 
-        <Numbers numbers={filterNameList()} />
+        <ShowNumbers numbers={filterNameList()} removeContact={removeContact} />
       </div>
     </div>
 
