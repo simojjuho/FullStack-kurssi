@@ -18,10 +18,12 @@ const App = () => {
     numbersService.getAll()
       .then(returnedNumbers => {
         setPersons(returnedNumbers.data)
+        setFeedbackMessage('Contacts loaded succesfully!')
         nullFeedbackMessage()
       })
       .catch(error => {
-        setErrorMsg(`Yhteystietojen noutaminen palvelimelta ei onnistunut!`)
+        setErrorMsg('Loading contacts failed!')
+        console.log(error)
         nullErrorMsg()
       })
   },[])
@@ -39,29 +41,30 @@ const App = () => {
       numbersService.createContact(contactObject)
         .then(returnedNumbers => {
           setPersons(persons.concat(returnedNumbers))
-          setFeedbackMessage(`Yhteystieto ${contactObject.name}: ${contactObject.number} lisättiin onnistuneesti palvelimelle!`)
+          setFeedbackMessage(`Contact ${contactObject.name}: ${contactObject.number} added!`)
           nullFeedbackMessage()
           setNewName('')
           setNewNumber('')
         })
         .catch(error => {
-          setErrorMsg(`Yhteystiedon ${contactObject.name}: ${contactObject.number} lisääminen palvelimelle ei onnistunut.`)
+          console.log(error.response.data)
+          setErrorMsg(error.response.data.error)
           nullErrorMsg()
         })
     }
   }
 
   const removeContact = (id, name) => {
-    if(window.confirm(`Haluatko varmasti poistaa ${id}: ${name} yhteystiedoista?`)){    
+    if(window.confirm(`Please confirm you want to remove ${id}: ${name} from contacts?`)){    
       numbersService.deleteContact(id)  
         .then(() => {
           setPersons(persons.filter(person => person.id !== id))
-          setFeedbackMessage(`Yhteystieto ${id}: ${name} on poistettu`)
+          setFeedbackMessage(`Contact ${id}: ${name} removed`)
           nullFeedbackMessage()
         })
         .catch(error => {
-          console.log('Yhteystietoa ei löytynyt palvelimelta')
-          setErrorMsg(`Yhteystietoa ei löytynyt palvelimelta`)
+          console.log('Contact not found')
+          setErrorMsg(`Contact not found`)
           nullErrorMsg()
           setPersons(persons.filter(person => person.id !== id))
         })
@@ -72,15 +75,15 @@ const App = () => {
 
 
   const updateContact = (person, newContact) => {
-    if(window.confirm(`Haluatko varmasti päivittää yhteystiedon?`)) {
+    if(window.confirm(`Please confirm you want to update contact?`)) {
       numbersService.update(person.id, newContact)
         .then(returnedNumber => {
           setPersons(persons.map(contact => contact.id !== person.id ? contact : returnedNumber))
-          setFeedbackMessage(`Yhteystiedo ID:llä ${person.id} on päivitetty.`)
+          setFeedbackMessage(`Contact updated.`)
           nullFeedbackMessage()
         })
         .catch(error =>{
-          setErrorMsg(`Yhteystiedon päivitys ei onnistunut!`)
+          setErrorMsg(error.response.data.error)
           nullErrorMsg()
         })
     }
