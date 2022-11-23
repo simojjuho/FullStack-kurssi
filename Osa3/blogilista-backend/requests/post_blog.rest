@@ -2,8 +2,8 @@ POST http://localhost:3001/api/blogs
 content-type: application/json
 
 {
-    "title": "RaapusRuapustus!tus",
-    "author": "J. Markkanen",
-    "url": "http://www.raapustus.net",
+    "title": "Aapistus",
+    "author": "J. Euronen",
+    "url": "http://www.aapistus.net",
     "likes": 5
 }

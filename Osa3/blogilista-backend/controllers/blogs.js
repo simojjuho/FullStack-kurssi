@@ -1,6 +1,7 @@
 const Blog = require('../models/blog')
 const blogRouter = require('express').Router()
 
+//Kaikki blogimerkinnät tietokannasta.
 blogRouter.get('/', (request, response) => {
   Blog
     .find({})
@@ -9,6 +10,7 @@ blogRouter.get('/', (request, response) => {
     })
 })
 
+//Uusien blogimerkintöjen luominen. Virheen käsittely middlewarella
 blogRouter.post('/', (request, response, next) => {
   const blog = new Blog(request.body)
   blog
