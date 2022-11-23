@@ -7,6 +7,7 @@ const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 const mongoose = require('mongoose')
 
+//Kaikki loggaaminen ulkoistettu yhdelle moduulille
 logger.info('connecting to', config.MONGODB_URI)
 
 mongoose.connect(config.MONGODB_URI)
@@ -22,6 +23,7 @@ app.use(express.json())
 app.use(express.static('build'))
 app.use(middleware.requestLogger)
 
+//Pyyntöjen route on /api/blogs, muut unknownEndpoint
 app.use('/api/blogs', blogRouter)
 
 app.use(middleware.errorHandler)
