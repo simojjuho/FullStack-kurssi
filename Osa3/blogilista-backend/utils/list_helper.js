@@ -5,7 +5,15 @@ const totalLikes = (blogs) => {
   return blogs.length === 0
     ? 0
     : blogs.reduce(reducer, 0)
+}
 
+const favoriteBlog = blogs => {
+  const reducer = (holder, current) => {
+    return current.likes > holder.likes
+      ? current
+      : holder
+  }
+  return blogs.reduce(reducer)
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -16,5 +24,6 @@ const dummy = (blogs) => {
 
 module.exports = {
   totalLikes,
+  favoriteBlog,
   dummy
 }
