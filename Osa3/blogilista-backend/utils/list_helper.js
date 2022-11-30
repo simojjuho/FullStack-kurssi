@@ -29,6 +29,24 @@ const mostBlogs = blogs => {
 
 }
 
+/* //Tehtävä 4.7 kesken
+
+const mostLikes = blogs => {
+  const reducer = (holder, current) => {
+    return holder.hasOwnProperty(current.author)
+      ? holder[current.author] += current.likes
+      : holder[current.author] = current.likes
+  }
+  const reducer2 = (holder, current) => {
+    return bloggersLikes[current] > bloggersLikes[holder]
+      ? current
+      : holder
+  }
+  const bloggersLikes =  blogs.reduce(reducer, {})
+  console.log(bloggersLikes)
+  return Object.keys(bloggersLikes).reduce(reducer2)
+} */
+
 // eslint-disable-next-line no-unused-vars
 const dummy = (blogs) => {
   return 1
