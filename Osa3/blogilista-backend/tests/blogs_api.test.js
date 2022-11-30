@@ -9,10 +9,10 @@ describe('blogs are fetched in json', () => {
 
   beforeEach(async () => {
     await Blog.deleteMany({})
-    let blogObject = new Blog(testHelper.initialBlogs[0])
-    await blogObject.save()
-    blogObject = new Blog(testHelper.initialBlogs[1])
-    await blogObject.save()
+
+    const blogObjects = testHelper.initialBlogs.map(blog => new Blog(blog))
+    const promiseArray = blogObjects.map(blog => blog.save())
+    await Promise.all(promiseArray)
   })
 
   test('blogs returned as json', async () => {
@@ -42,10 +42,10 @@ describe('posting blogs', () => {
 
   beforeEach(async () => {
     await Blog.deleteMany({})
-    let blogObject = new Blog(testHelper.initialBlogs[0])
-    await blogObject.save()
-    blogObject = new Blog(testHelper.initialBlogs[1])
-    await blogObject.save()
+
+    const blogObjects = testHelper.initialBlogs.map(blog => new Blog(blog))
+    const promiseArray = blogObjects.map(blog => blog.save())
+    await Promise.all(promiseArray)
   })
 
   test('post a valid blog', async () => {
@@ -89,6 +89,55 @@ describe('posting blogs', () => {
 
     const response = await testHelper.getAllBlogs()
     expect(response[2].likes).toBe(0)
+  })
+})
+
+describe('delete a blog', () => {
+
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+
+    const blogObjects = testHelper.initialBlogs.map(blog => new Blog(blog))
+    const promiseArray = blogObjects.map(blog => blog.save())
+    await Promise.all(promiseArray)
+  })
+
+  test('with a valid id', async () => {
+    const blogsAtTheStart = await testHelper.getAllBlogs()
+    const blogToDelete = blogsAtTheStart[0]
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+    const blogsAtTheEnd = await testHelper.getAllBlogs()
+    expect(blogsAtTheEnd).toHaveLength(blogsAtTheStart.length - 1)
+  })
+})
+
+describe('update a blog', () => {
+
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+
+    const blogObjects = testHelper.initialBlogs.map(blog => new Blog(blog))
+    const promiseArray = blogObjects.map(blog => blog.save())
+    await Promise.all(promiseArray)
+  })
+
+  test('update an existing blog', async () => {
+    const blogToModify = await testHelper.getAllBlogs()
+    const id = blogToModify[0].id
+    console.log(id)
+    const blogObject = {
+      likes: 200
+    }
+    await api
+      .put(`/api/blogs/${id}`)
+      .send(blogObject)
+
+    const updatedBlogs = await testHelper.getAllBlogs()
+    expect(updatedBlogs[0].likes).toBe(200)
   })
 })
 
