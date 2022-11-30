@@ -3,31 +3,18 @@ const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blog')
 const api = supertest(app)
-
-const initialBlogs = [
-  {
-    title: 'Canonical string reduction',
-    author: 'Edsger W. Dijkstra',
-    url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
-    likes: 12
-  },
-  {
-    title: 'First class tests',
-    author: 'Robert C. Martin',
-    url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
-    likes: 10,
-  }
-]
-
-beforeEach(async () => {
-  await Blog.deleteMany({})
-  let blogObject = new Blog(initialBlogs[0])
-  await blogObject.save()
-  blogObject = new Blog(initialBlogs[1])
-  await blogObject.save()
-})
+const testHelper = require('../utils/test_helper')
 
 describe('blogs are fetched in json', () => {
+
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    let blogObject = new Blog(testHelper.initialBlogs[0])
+    await blogObject.save()
+    blogObject = new Blog(testHelper.initialBlogs[1])
+    await blogObject.save()
+  })
+
   test('blogs returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -52,6 +39,15 @@ describe('blogs are fetched in json', () => {
 })
 
 describe('posting blogs', () => {
+
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    let blogObject = new Blog(testHelper.initialBlogs[0])
+    await blogObject.save()
+    blogObject = new Blog(testHelper.initialBlogs[1])
+    await blogObject.save()
+  })
+
   test('post a valid blog', async () => {
     const newBlog = {
       title: 'Blog',
@@ -65,10 +61,9 @@ describe('posting blogs', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
-    const response = await api.get('/api/blogs')
-
-    const authors = response.body.map(a => a.author)
-    expect(response.body).toHaveLength(initialBlogs.length + 1)
+    const response = await testHelper.getAllBlogs()
+    const authors = response.map(a => a.author)
+    expect(response).toHaveLength(testHelper.initialBlogs.length + 1)
     expect(authors).toContain('Writer')
   })
 
@@ -92,8 +87,8 @@ describe('posting blogs', () => {
       .post('/api/blogs')
       .send(newBlog)
 
-    const response = await api.get('/api/blogs')
-    expect(response.body[2].likes).toBe(0)
+    const response = await testHelper.getAllBlogs()
+    expect(response[2].likes).toBe(0)
   })
 })
 
