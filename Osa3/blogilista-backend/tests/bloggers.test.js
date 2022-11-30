@@ -52,9 +52,14 @@ describe('blogger who has', () => {
     }
   ]
 
-  test('mostBlogs', () => {
+  test('most blogs', () => {
     const result = listHelper.mostBlogs(blogs)
     expect(result).toBe('Robert C. Martin')
+  })
+
+  test('most likes', () => {
+    const result = listHelper.mostLikes(blogs)
+    expect(result).toBe('Edsger W. Dijkstra')
   })
 
 })
