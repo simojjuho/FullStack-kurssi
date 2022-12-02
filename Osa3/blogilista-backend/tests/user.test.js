@@ -16,7 +16,6 @@ describe('initially one user in db', () => {
 
   test('succesfully creating new user', async () => {
     const usersAtStart = await testHelper.usersInDB()
-    console.log('usersAtStart',usersAtStart)
     const user = {
       username: 'jusimo',
       name: 'juho',
@@ -35,6 +34,27 @@ describe('initially one user in db', () => {
     const usernames = (await usersAtEnd).map(user => user.username)
     expect(usernames).toContain('jusimo')
   })
+
+  test('failing to create usernames and passwords too short', async () => {
+    const usersAtStart = await testHelper.usersInDB()
+    const user = {
+      username: 'ju',
+      name: 'whatever',
+      password: 'pas'
+    }
+
+    await api
+      .post('/api/users')
+      .send(user)
+      .expect(400)
+
+    const usersAtEnd = await testHelper.usersInDB()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
+  /*   test('failing to create usernames and passwords nonexisting', async () => {
+  })
+ */
 
   test('failing to create existing username', async () => {
     const usersAtStart = await testHelper.usersInDB()
