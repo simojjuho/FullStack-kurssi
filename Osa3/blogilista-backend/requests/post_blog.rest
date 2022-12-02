@@ -1,9 +1,11 @@
 POST http://localhost:3001/api/blogs
 content-type: application/json
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoianVzdXN1IiwiaWQiOiI2MzhhMDVkNzMwZjdiYWNmMTQyNjI5OTEiLCJpYXQiOjE2Njk5ODk4NzZ9.5kmnHHfJ24rB81qF32U8vLlMjnn0tMyognWtYCNtB3U
 
 {
-    "title": "Aapistus",
-    "author": "J. Euronen",
+    "title": "Räävistys",
+    "author": "J. Dollarinen",
     "url": "http://www.aapistus.net",
-    "likes": 5
+    "likes": 5,
+    "userId": "6389c2aea83511641b9c5251"
 }
