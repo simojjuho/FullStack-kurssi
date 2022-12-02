@@ -4,6 +4,7 @@ require('express-async-errors')
 const app = express()
 const cors = require('cors')
 const blogRouter = require('./controllers/blogs')
+const userRouter = require('./controllers/users')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 const mongoose = require('mongoose')
@@ -26,6 +27,7 @@ app.use(middleware.requestLogger)
 
 //Pyyntöjen route on /api/blogs, muut unknownEndpoint
 app.use('/api/blogs', blogRouter)
+app.use('/api/users', userRouter)
 
 app.use(middleware.errorHandler)
 app.use(middleware.unknownEndpoint)
