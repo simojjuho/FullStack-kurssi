@@ -61,7 +61,7 @@ describe('posting blogs', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
-    const response = await testHelper.getAllBlogs()
+    const response = await testHelper.blogsInDB()
     const authors = response.map(a => a.author)
     expect(response).toHaveLength(testHelper.initialBlogs.length + 1)
     expect(authors).toContain('Writer')
@@ -87,7 +87,7 @@ describe('posting blogs', () => {
       .post('/api/blogs')
       .send(newBlog)
 
-    const response = await testHelper.getAllBlogs()
+    const response = await testHelper.blogsInDB()
     expect(response[2].likes).toBe(0)
   })
 })
@@ -103,14 +103,14 @@ describe('delete a blog', () => {
   })
 
   test('with a valid id', async () => {
-    const blogsAtTheStart = await testHelper.getAllBlogs()
+    const blogsAtTheStart = await testHelper.blogsInDB()
     const blogToDelete = blogsAtTheStart[0]
 
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
       .expect(204)
 
-    const blogsAtTheEnd = await testHelper.getAllBlogs()
+    const blogsAtTheEnd = await testHelper.blogsInDB()
     expect(blogsAtTheEnd).toHaveLength(blogsAtTheStart.length - 1)
   })
 })
@@ -126,7 +126,7 @@ describe('update a blog', () => {
   })
 
   test('update an existing blog', async () => {
-    const blogToModify = await testHelper.getAllBlogs()
+    const blogToModify = await testHelper.blogsInDB()
     const id = blogToModify[0].id
     console.log(id)
     const blogObject = {
@@ -136,7 +136,7 @@ describe('update a blog', () => {
       .put(`/api/blogs/${id}`)
       .send(blogObject)
 
-    const updatedBlogs = await testHelper.getAllBlogs()
+    const updatedBlogs = await testHelper.blogsInDB()
     expect(updatedBlogs[0].likes).toBe(200)
   })
 })
