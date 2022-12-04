@@ -26,6 +26,10 @@ const usersInDB = async () => {
   return result.map(blog => blog.toJSON())
 }
 
+/* const loginHelper = async () => {
+
+} */
+
 module.exports = {
   initialBlogs,
   blogsInDB,
