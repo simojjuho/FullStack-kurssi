@@ -4,6 +4,8 @@ const app = require('../app')
 const Blog = require('../models/blog')
 const api = supertest(app)
 const testHelper = require('../utils/test_helper')
+const User = require('../models/user')
+const bcrypt = require('bcrypt')
 
 describe('blogs are fetched in json', () => {
 
@@ -46,9 +48,24 @@ describe('posting blogs', () => {
     const blogObjects = testHelper.initialBlogs.map(blog => new Blog(blog))
     const promiseArray = blogObjects.map(blog => blog.save())
     await Promise.all(promiseArray)
+
+    await User.deleteMany({})
+    const passwordHash = await bcrypt.hash('salainen', 10)
+    const user = new User({ username: 'root', passwordHash })
+
+    await user.save()
   })
 
   test('post a valid blog', async () => {
+    //First login as root, password: 'salainen'
+    const user = {
+      username: 'root',
+      password: 'salainen'
+    }
+    const loginResult = await api
+      .post('/api/login')
+      .send(user)
+
     const newBlog = {
       title: 'Blog',
       author: 'Writer',
@@ -57,6 +74,9 @@ describe('posting blogs', () => {
     }
     await api
       .post('/api/blogs')
+      .set( {
+        'Authorization': `bearer ${loginResult.body.token}`
+      })
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -67,17 +87,38 @@ describe('posting blogs', () => {
     expect(authors).toContain('Writer')
   })
 
-  test('post an unvalid blog', async () => {
+  test('failed to post an unvalid blog', async () => {
+    //First login as root, password: 'salainen'
+    const user = {
+      username: 'root',
+      password: 'salainen'
+    }
+    const loginResult = await api
+      .post('/api/login')
+      .send(user)
+
     const newBlog = {
       likes: 10
     }
     await api
       .post('/api/blogs')
+      .set( {
+        'Authorization': `bearer ${loginResult.body.token}`
+      })
       .send(newBlog)
       .expect(400)
   })
 
   test('undefined likes turned to zero', async () => {
+    //First login as root, password: 'salainen'
+    const user = {
+      username: 'root',
+      password: 'salainen'
+    }
+    const loginResult = await api
+      .post('/api/login')
+      .send(user)
+
     const newBlog = {
       title: 'Blog',
       author: 'Writer',
@@ -85,14 +126,36 @@ describe('posting blogs', () => {
     }
     await api
       .post('/api/blogs')
+      .set( {
+        'Authorization': `bearer ${loginResult.body.token}`
+      })
       .send(newBlog)
 
     const response = await testHelper.blogsInDB()
     expect(response[2].likes).toBe(0)
   })
+
+  test('failed tp post a new blog without a valid token', async () => {
+    //First login as root, password: 'salainen'
+    const newBlog = {
+      title: 'Blog',
+      author: 'Writer',
+      url: 'www.url.com',
+      likes: 10
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtTheEnd = await testHelper.blogsInDB()
+    expect(blogsAtTheEnd).toHaveLength(testHelper.initialBlogs.length)
+
+  })
 })
 
-describe('delete a blog', () => {
+describe('delete a blog succesfully', () => {
 
   beforeEach(async () => {
     await Blog.deleteMany({})
@@ -128,7 +191,6 @@ describe('update a blog', () => {
   test('update an existing blog', async () => {
     const blogToModify = await testHelper.blogsInDB()
     const id = blogToModify[0].id
-    console.log(id)
     const blogObject = {
       likes: 200
     }

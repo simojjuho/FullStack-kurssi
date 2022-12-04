@@ -52,9 +52,23 @@ describe('initially one user in db', () => {
     expect(usersAtEnd).toHaveLength(usersAtStart.length)
   })
 
-  /*   test('failing to create usernames and passwords nonexisting', async () => {
+  test('failing to create usernames and passwords nonexisting', async () => {
+    const usersAtStart = await testHelper.usersInDB()
+    const user = {
+      username: '',
+      name: 'whatever',
+      password: ''
+    }
+
+    await api
+      .post('/api/users')
+      .send(user)
+      .expect(400)
+
+    const usersAtEnd = await testHelper.usersInDB()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
   })
- */
+
 
   test('failing to create existing username', async () => {
     const usersAtStart = await testHelper.usersInDB()

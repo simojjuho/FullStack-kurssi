@@ -1,7 +1,6 @@
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const blogRouter = require('express').Router()
-const jwt = require('jsonwebtoken')
 
 //Kaikki blogimerkinnät tietokannasta.
 blogRouter.get('/', async (request, response) => {
@@ -13,11 +12,10 @@ blogRouter.get('/', async (request, response) => {
 //Uusien blogimerkintöjen luominen.
 blogRouter.post('/', async (request, response) => {
   const body = request.body
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  if (!request.token || !decodedToken.id) {
+  if (!request.token || !request.user.id) {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
-  const user = await User.findById(decodedToken.id)
+  const user = await User.findById(request.user.id)
   const blog = new Blog({
     title: body.title,
     author: body.author,
@@ -25,7 +23,7 @@ blogRouter.post('/', async (request, response) => {
     likes: body.likes,
     user: user._id
   })
-  if (blog.title === undefined ||blog.author === undefined ||blog.url === undefined) {
+  if (blog.title === undefined || blog.author === undefined || blog.url === undefined) {
     response.status(400).send({ error: 'Content missing!' })
   }
 
@@ -40,6 +38,17 @@ blogRouter.post('/', async (request, response) => {
 
 //Blogimerkintöjen poistaminen
 blogRouter.delete('/:id', async (request, response) => {
+  if (!request.token || !request.user.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+  const user = request.user.id
+  const blog = await Blog.findById(request.params.id)
+  const blogMakerId = blog.user.toString()
+
+  if (!(user.toString() === blogMakerId)) {
+    return response.status(401).json({ error: 'blog post made by other user' })
+  }
+
   await Blog.findByIdAndRemove(request.params.id)
   response.status(204).end()
 })

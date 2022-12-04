@@ -1,11 +1,11 @@
 POST http://localhost:3001/api/blogs
 content-type: application/json
-authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoianVzdXN1IiwiaWQiOiI2MzhhMDVkNzMwZjdiYWNmMTQyNjI5OTEiLCJpYXQiOjE2Njk5ODk4NzZ9.5kmnHHfJ24rB81qF32U8vLlMjnn0tMyognWtYCNtB3U
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoianVobzg3IiwiaWQiOiI2Mzg5YzJhZWE4MzUxMTY0MWI5YzUyNTEiLCJpYXQiOjE2NzAxNTU1MTMsImV4cCI6MTY3MDE1OTExM30.J1KU9WBw1uRkMAiMzDNWo8hdOLpGubh1dYdZiR7pilI
 
 {
-    "title": "Räävistys",
-    "author": "J. Dollarinen",
-    "url": "http://www.aapistus.net",
+    "title": "Testi",
+    "author": "Testaaja",
+    "url": "http://www.url.net",
     "likes": 5,
     "userId": "6389c2aea83511641b9c5251"
 }
