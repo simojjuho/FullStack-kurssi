@@ -27,7 +27,7 @@ blogRouter.post('/', async (request, response) => {
     response.status(400).send({ error: 'Content missing!' })
   }
 
-  if (blog.likes === undefined) blog.likes = 0
+  if (!blog.likes) blog.likes = 0
 
   const result = await blog.save()
   user.blogs = user.blogs.concat(result._id)

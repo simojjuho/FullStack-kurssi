@@ -7,7 +7,7 @@ const testHelper = require('../utils/test_helper')
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 
-describe('blogs are fetched in json', () => {
+describe('blogs are fetched', () => {
 
   beforeEach(async () => {
     await Blog.deleteMany({})
@@ -18,24 +18,75 @@ describe('blogs are fetched in json', () => {
   })
 
   test('blogs returned as json', async () => {
+    //First login as root, password: 'salainen'
+    const user = {
+      username: 'root',
+      password: 'salainen'
+    }
+    const loginResult = await api
+      .post('/api/login')
+      .send(user)
+
     await api
       .get('/api/blogs')
+      .set( {
+        'Authorization': `bearer ${loginResult.body.token}`
+      })
       .expect(200)
       .expect('Content-Type', /application\/json/)
   })
 
   test('there are two blogs', async () => {
-    const response = await api.get('/api/blogs')
+    //First login as root, password: 'salainen'
+    const user = {
+      username: 'root',
+      password: 'salainen'
+    }
+    const loginResult = await api
+      .post('/api/login')
+      .send(user)
+
+    const response = await api
+      .get('/api/blogs')
+      .set( {
+        'Authorization': `bearer ${loginResult.body.token}`
+      })
     expect(response.body).toHaveLength(2)
   })
 
   test('first blogger is Dijkstra', async () => {
-    const response = await api.get('/api/blogs')
+    //First login as root, password: 'salainen'
+    const user = {
+      username: 'root',
+      password: 'salainen'
+    }
+    const loginResult = await api
+      .post('/api/login')
+      .send(user)
+
+    const response = await api
+      .get('/api/blogs')
+      .set( {
+        'Authorization': `bearer ${loginResult.body.token}`
+      })
     expect(response.body[0].author).toBe('Edsger W. Dijkstra')
   })
 
   test('having and id field called id', async () => {
-    const response = await api.get('/api/blogs')
+    //First login as root, password: 'salainen'
+    const user = {
+      username: 'root',
+      password: 'salainen'
+    }
+    const loginResult = await api
+      .post('/api/login')
+      .send(user)
+
+    const response = await api
+      .get('/api/blogs')
+      .set( {
+        'Authorization': `bearer ${loginResult.body.token}`
+      })
     expect(response.body[0].id).toBeDefined()
   })
 })
@@ -122,7 +173,8 @@ describe('posting blogs', () => {
     const newBlog = {
       title: 'Blog',
       author: 'Writer',
-      url: 'www.url.com'
+      url: 'www.url.com',
+      likes: ''
     }
     await api
       .post('/api/blogs')
@@ -132,6 +184,7 @@ describe('posting blogs', () => {
       .send(newBlog)
 
     const response = await testHelper.blogsInDB()
+    console.log(response)
     expect(response[2].likes).toBe(0)
   })
 
