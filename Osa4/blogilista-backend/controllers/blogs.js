@@ -1,6 +1,7 @@
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const blogRouter = require('express').Router()
+const middleware = require('../utils/middleware')
 
 //Kaikki blogimerkinnät tietokannasta.
 blogRouter.get('/', async (request, response) => {
@@ -10,7 +11,7 @@ blogRouter.get('/', async (request, response) => {
 })
 
 //Uusien blogimerkintöjen luominen.
-blogRouter.post('/', async (request, response) => {
+blogRouter.post('/', middleware.tokenExtractor, middleware.userExtractor, async (request, response) => {
   const body = request.body
   if (!request.token || !request.user.id) {
     return response.status(401).json({ error: 'token missing or invalid' })
@@ -37,7 +38,7 @@ blogRouter.post('/', async (request, response) => {
 })
 
 //Blogimerkintöjen poistaminen
-blogRouter.delete('/:id', async (request, response) => {
+blogRouter.delete('/:id', middleware.tokenExtractor, middleware.userExtractor, async (request, response) => {
   if (!request.token || !request.user.id) {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
