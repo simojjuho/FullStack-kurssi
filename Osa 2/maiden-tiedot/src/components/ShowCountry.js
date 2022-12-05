@@ -9,6 +9,7 @@ const ShowCountryInfo = ({country}) => {
             {Object.values(country.languages).map(language => <Language key={language} language={language}/>)}                
             </ul>
             <Flag country={country} />
+            <WeatherIn capital = {country.capital[0]} />
         </div>
     )
 }
@@ -18,3 +19,7 @@ export default ShowCountryInfo
 const Language = ({language}) => <li >{language}</li>
 
 const Flag = ({country}) => <><img src={country.flags.png} /></>
+
+const WeatherIn = () => {
+    
+}
