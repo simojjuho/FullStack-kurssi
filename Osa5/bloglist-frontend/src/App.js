@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Login from './components/Login'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -9,17 +10,20 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMsg, setErrorMsg] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+  const [infoMsg, setInfoMsg] = useState(null)
 
+
+  //One function to handle communication with blogService.getAll()
+  const getAllBlogs = async () => {
+    const newBlogs = await blogService.getAll()
+    setBlogs(newBlogs)
+  }
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+    getAllBlogs()
   }, [])
 
+  //Checks on reload if a user logged in, checks from the window.localStorage
   useEffect(() => {
     const loggedUser = window.localStorage.getItem('loggedUser')
     if (loggedUser) {
@@ -35,12 +39,16 @@ const App = () => {
     try {
       const user = await loginService.login({ username, password })
       setUser(user)
+      setInfoMsg('Login succesful!')
+      setTimeout(() => {
+        setInfoMsg(null)
+      }, 5000)
       blogService.setToken(user.token)
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       setUsername('')
-      setPassword('')      
+      setPassword('')
     } catch (error) {
-      setErrorMsg('unauthorized')
+      setErrorMsg('Unauthorized, wrong username and/or password')
       setTimeout(() => {
         setErrorMsg(null)
       }, 5000)
@@ -52,23 +60,15 @@ const App = () => {
     setUser(null)
   }
 
-  const handleCreate = async event => {
-    event.preventDefault()
-    const newBlog = {
-      title,
-      author,
-      url
-    }
-    console.log(`Creating a blog ${newBlog.toString()}`)
+  //Takes care of new blog creation
+  const handleCreate = async newBlog => {
     try {
       const result = await blogService.create(newBlog)
-      console.log(result)
-      setAuthor('')
-      setTitle('')
-      setUrl('')
-      blogService.getAll().then(blogs =>
-        setBlogs( blogs )
-      )  
+      setBlogs(blogs.concat(result))
+      setInfoMsg('Blog succesfully created!')
+      setTimeout(() => {
+        setInfoMsg(null)
+      }, 5000)
     } catch (exeption) {
       setErrorMsg(exeption.error)
       setTimeout(() => {
@@ -77,69 +77,20 @@ const App = () => {
     }
   }
 
-  const login = () => {
-    if (user === null) {
-      return (
-        <div>
-          <h2>Login</h2>
-          <form onSubmit={handleLogin}>
-            <input 
-              type='text'
-              value={username}
-              name='Username'
-              onChange={({ target }) => setUsername(target.value)}
-            />
-            <input 
-              type='password'
-              value={password}
-              name='Password'
-              onChange={({ target }) => setPassword(target.value)}
-              />
-              <button 
-                type='submit'
-                >
-                Login
-              </button>
-          </form>
-        </div>
-      )
-    }
-    return (
-      <div>
-        <p>{user.name} logged in</p> 
-        <button onClick={()=>logout()}>logout</button>
-        <h2>blogs</h2>
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
-        )}
-        <h2>Create a blog</h2>
-        <form onSubmit={handleCreate}>
-          <input 
-            type='text'
-            value={title}
-            name='Title'
-            onChange={({ target })=> setTitle(target.value)}
-          />
-          <input
-            type='text'
-            value={author}
-            name='Author'
-            onChange={({ target }) => setAuthor( target.value )}
-            />
-          <input
-            type='text'
-            value={url}
-            name='Url'
-            onChange={({ target }) => setUrl( target.value )}
-          />
-          <button type='submit'>create</button>
-        </form>
-      </div>
-    )
-  }
-
   return (
-    login()
+    <Login 
+      username={username}
+      password={password}
+      setUsername={setUsername}
+      setPassword={setPassword}
+      user={user}
+      blogs={blogs}
+      handleLogin={handleLogin}
+      handleCreate={handleCreate}
+      logout={logout}
+      errorMsg={errorMsg}
+      infoMsg={infoMsg}
+    />
   )
 }
 
