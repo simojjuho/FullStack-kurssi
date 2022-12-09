@@ -6,10 +6,6 @@ import LoginForm from './LoginForm'
 import Togglable from './Togglable'
 
 const Login = ({
-    username,
-    password,
-    setUsername,
-    setPassword,
     user,
     blogs,
     handleLogin,
@@ -29,10 +25,6 @@ const Login = ({
           <Togglable buttonLabel={'login'}>
             <LoginForm 
             handleLogin={handleLogin}
-            username={username}
-            password={password}
-            setUsername={setUsername}
-            setPassword={setPassword}
             />
           </Togglable>
         </div>

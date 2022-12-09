@@ -1,13 +1,10 @@
 import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
 import Login from './components/Login'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMsg, setErrorMsg] = useState(null)
   const [infoMsg, setInfoMsg] = useState(null)
@@ -33,11 +30,9 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async event => {
-    event.preventDefault()
-    console.log('Logging in with', username, password)
+  const handleLogin = async newLogin => {
     try {
-      const user = await loginService.login({ username, password })
+      const user = await loginService.login(newLogin)
       setUser(user)
       setInfoMsg('Login succesful!')
       setTimeout(() => {
@@ -45,8 +40,6 @@ const App = () => {
       }, 5000)
       blogService.setToken(user.token)
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
-      setUsername('')
-      setPassword('')
     } catch (error) {
       setErrorMsg('Unauthorized, wrong username and/or password')
       setTimeout(() => {
@@ -79,10 +72,6 @@ const App = () => {
 
   return (
     <Login 
-      username={username}
-      password={password}
-      setUsername={setUsername}
-      setPassword={setPassword}
       user={user}
       blogs={blogs}
       handleLogin={handleLogin}
