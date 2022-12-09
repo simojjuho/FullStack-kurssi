@@ -70,6 +70,20 @@ const App = () => {
     }
   }
 
+  const handleAddLike = async (newBlog, id) => {
+    try {
+    const result = await blogService.update(newBlog, id)
+    setInfoMsg('Tykkäys lisätty')
+    console.log(result)
+    } catch (exception) {
+      console.log(exception)
+      setErrorMsg(exception)
+      setTimeout(()=> {
+        setErrorMsg(null)
+      })
+    }
+  }
+
   return (
     <Login 
       user={user}
@@ -79,6 +93,7 @@ const App = () => {
       logout={logout}
       errorMsg={errorMsg}
       infoMsg={infoMsg}
+      handleAddLike={handleAddLike}
     />
   )
 }
