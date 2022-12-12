@@ -71,7 +71,8 @@ const App = () => {
   const handleCreate = async newBlog => {
     try {
       const result = await blogService.create(newBlog)
-      setBlogs(blogs.concat(result))
+      getAllBlogs()
+      console.log(result)
       setInfoMsg('Blog succesfully created!')
       setTimeout(() => {
         setInfoMsg(null)
