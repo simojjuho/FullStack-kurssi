@@ -33,8 +33,7 @@ blogRouter.post('/', middleware.tokenExtractor, middleware.userExtractor, async 
   const result = await blog.save()
   user.blogs = user.blogs.concat(result._id)
   await user.save()
-
-  response.status(201).json(result.toJSON)
+  response.status(201).json(result)
 })
 
 //Blogimerkintöjen poistaminen

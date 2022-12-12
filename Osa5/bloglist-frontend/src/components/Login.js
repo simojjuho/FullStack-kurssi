@@ -13,7 +13,8 @@ const Login = ({
     logout,
     errorMsg,
     infoMsg,
-    handleAddLike
+    handleAddLike,
+    handleRemove
     
 }) => {
     if (user === null) {
@@ -40,7 +41,7 @@ const Login = ({
         <button onClick={()=>logout()}>logout</button>
         <h2>blogs</h2>
         {blogs.map(blog => 
-          <Blog key={blog.id} blog={blog} handleAddLike={handleAddLike}/>
+          <Blog key={blog.id} blog={blog} handleAddLike={handleAddLike} handleRemove={handleRemove}/>
         )}
         <Togglable buttonLabel={'Create new'}>
           <h2>Create a blog</h2>

@@ -14,10 +14,19 @@ const App = () => {
   const getAllBlogs = async () => {
     const newBlogs = await blogService.getAll()
     setBlogs(newBlogs)
+    console.log(blogs)
+    sortBlogs()
+  }
+
+  const sortBlogs = () => {
+    setBlogs([...blogs].sort((a,b)=> {
+      return b.likes - a.likes
+    }))
   }
 
   useEffect(() => {
     getAllBlogs()
+    
   }, [])
 
   //Checks on reload if a user logged in, checks from the window.localStorage
@@ -73,15 +82,37 @@ const App = () => {
   const handleAddLike = async (newBlog, id) => {
     try {
     const result = await blogService.update(newBlog, id)
+    sortBlogs()
     setInfoMsg('Tykkäys lisätty')
+    setTimeout(()=>{
+      setInfoMsg(null)
+    }, 5000)
     console.log(result)
     } catch (exception) {
       console.log(exception)
       setErrorMsg(exception)
       setTimeout(()=> {
         setErrorMsg(null)
-      })
+      },5000)
     }
+  }
+
+  const handleRemove = async id => {
+    try {
+      const result = await blogService.remove(id)
+      getAllBlogs()
+      setInfoMsg('Blogi poistettu')
+      setTimeout(()=>{
+        setInfoMsg(null)
+      }, 5000)
+      console.log(result)
+      } catch (exception) {
+        console.log(exception)
+        setErrorMsg(exception)
+        setTimeout(()=> {
+          setErrorMsg(null)
+        },5000)
+      }
   }
 
   return (
@@ -94,6 +125,7 @@ const App = () => {
       errorMsg={errorMsg}
       infoMsg={infoMsg}
       handleAddLike={handleAddLike}
+      handleRemove={handleRemove}
     />
   )
 }
