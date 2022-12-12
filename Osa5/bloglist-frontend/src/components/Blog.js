@@ -26,7 +26,9 @@ const Blog = ({blog, handleAddLike, handleRemove, username}) => {
   }
 
   const deleteBlog = () => {
-    handleRemove(blog.id)
+    if (window.confirm(`Want to delete ${blog.author}: ${blog.title}?`)) {
+      handleRemove(blog.id)
+    }
   }
 
   const deleteButton = () => {
