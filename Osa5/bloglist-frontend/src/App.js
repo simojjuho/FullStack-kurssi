@@ -13,20 +13,25 @@ const App = () => {
   //One function to handle communication with blogService.getAll()
   const getAllBlogs = async () => {
     const newBlogs = await blogService.getAll()
-    setBlogs(newBlogs)
-    console.log(blogs)
-    sortBlogs()
+    const blogsSorted = sortBlogs(newBlogs)
+    await setBlogs(blogsSorted)
   }
 
-  const sortBlogs = () => {
-    setBlogs([...blogs].sort((a,b)=> {
+  const sortBlogs = blogs => {
+    return ([...blogs].sort((a,b)=> {
       return b.likes - a.likes
     }))
   }
 
   useEffect(() => {
-    getAllBlogs()
-    
+    blogService.getAll()
+      .then(blogs => {
+        setBlogs(blogs.sort((a,b)=> {
+          return b.likes - a.likes
+        }))
+      })
+
+      
   }, [])
 
   //Checks on reload if a user logged in, checks from the window.localStorage
@@ -101,11 +106,11 @@ const App = () => {
     try {
       const result = await blogService.remove(id)
       getAllBlogs()
+      console.log('Blog removal status: ', result.status)
       setInfoMsg('Blogi poistettu')
       setTimeout(()=>{
         setInfoMsg(null)
       }, 5000)
-      console.log(result)
       } catch (exception) {
         console.log(exception)
         setErrorMsg(exception)
