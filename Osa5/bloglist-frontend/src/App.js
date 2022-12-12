@@ -18,7 +18,7 @@ const App = () => {
   }
 
   const sortBlogs = blogs => {
-    return ([...blogs].sort((a,b)=> {
+    return ([...blogs].sort((a,b) => {
       return b.likes - a.likes
     }))
   }
@@ -26,12 +26,12 @@ const App = () => {
   useEffect(() => {
     blogService.getAll()
       .then(blogs => {
-        setBlogs(blogs.sort((a,b)=> {
+        setBlogs(blogs.sort((a,b) => {
           return b.likes - a.likes
         }))
       })
 
-      
+
   }, [])
 
   //Checks on reload if a user logged in, checks from the window.localStorage
@@ -87,17 +87,17 @@ const App = () => {
 
   const handleAddLike = async (newBlog, id) => {
     try {
-    const result = await blogService.update(newBlog, id)
-    sortBlogs()
-    setInfoMsg('Tykkäys lisätty')
-    setTimeout(()=>{
-      setInfoMsg(null)
-    }, 5000)
-    console.log(result)
+      const result = await blogService.update(newBlog, id)
+      sortBlogs()
+      setInfoMsg('Tykkäys lisätty')
+      setTimeout(() => {
+        setInfoMsg(null)
+      }, 5000)
+      console.log(result)
     } catch (exception) {
       console.log(exception)
       setErrorMsg(exception)
-      setTimeout(()=> {
+      setTimeout(() => {
         setErrorMsg(null)
       },5000)
     }
@@ -109,20 +109,20 @@ const App = () => {
       getAllBlogs()
       console.log('Blog removal status:', result.status)
       setInfoMsg('Blogi poistettu')
-      setTimeout(()=>{
+      setTimeout(() => {
         setInfoMsg(null)
       }, 5000)
-      } catch (exception) {
-        console.log(exception)
-        setErrorMsg(exception)
-        setTimeout(()=> {
-          setErrorMsg(null)
-        },5000)
-      }
+    } catch (exception) {
+      console.log(exception)
+      setErrorMsg(exception)
+      setTimeout(() => {
+        setErrorMsg(null)
+      },5000)
+    }
   }
 
   return (
-    <Login 
+    <Login
       user={user}
       blogs={blogs}
       handleLogin={handleLogin}

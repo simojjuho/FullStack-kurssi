@@ -1,8 +1,16 @@
-import { useState } from "react"
+import { useState } from 'react'
+import PropTypes from 'prop-types'
 
-const Blog = ({blog, handleAddLike, handleRemove, username}) => {
+const Blog = ({ blog, handleAddLike, handleRemove, username }) => {
+  Blog.propTypes = ({
+    blog: PropTypes.object.isRequired,
+    handleAddLike: PropTypes.func.isRequired,
+    handleRemove: PropTypes.func.isRequired,
+    username: PropTypes.string.isRequired
+  })
+
   const [showMore, setShowMore] = useState(false)
-  
+
   const toggleVisibility = () => {
     setShowMore(!showMore)
   }
@@ -33,7 +41,7 @@ const Blog = ({blog, handleAddLike, handleRemove, username}) => {
 
   const deleteButton = () => {
     return username === blog.user.username
-      ? <button onClick={()=>deleteBlog()}>delete</button>
+      ? <button onClick={() => deleteBlog()}>delete</button>
       : null
   }
 
@@ -43,17 +51,17 @@ const Blog = ({blog, handleAddLike, handleRemove, username}) => {
         Title: {blog.title}<button onClick={() => toggleVisibility()}>view less</button><br />
         Author: {blog.author}<br />
         Likes: {blog.likes}<br />
-        <button onClick={()=>addLike(blog.id)}>like</button><br />
+        <button onClick={() => addLike(blog.id)}>like</button><br />
         Url: {blog.url}<br />
         {deleteButton()}
       </div>
     )
   } else {
     return (
-    <div style={blogStyle}>
-      {blog.title} {blog.author}
-      <button onClick={() => toggleVisibility()}>view more</button>
-    </div>  
+      <div style={blogStyle}>
+        {blog.title} {blog.author}
+        <button onClick={() => toggleVisibility()}>view more</button>
+      </div>
     )
   }
 }

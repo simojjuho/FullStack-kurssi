@@ -18,7 +18,7 @@ const create = async newBlog => {
   }
   const response = await axios.post(baseUrl, newBlog, config)
   return response.data
-} 
+}
 
 const update = async (newBlog, id) => {
   const response = await axios.put(`${baseUrl}/${id}`, newBlog)
@@ -33,8 +33,8 @@ const remove = async id => {
   return response
 }
 
-const blogs = { 
-  getAll, 
+const blogs = {
+  getAll,
   create,
   setToken,
   update,
