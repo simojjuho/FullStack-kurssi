@@ -106,7 +106,7 @@ const App = () => {
     try {
       const result = await blogService.remove(id)
       getAllBlogs()
-      console.log('Blog removal status: ', result.status)
+      console.log('Blog removal status:', result.status)
       setInfoMsg('Blogi poistettu')
       setTimeout(()=>{
         setInfoMsg(null)
