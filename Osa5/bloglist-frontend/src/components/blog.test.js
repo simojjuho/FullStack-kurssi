@@ -43,3 +43,30 @@ test('also the likes and url render when view more is clicked', async () => {
   expect(div).toHaveTextContent('bestblog.com')
   expect(div).toHaveTextContent('10')
 })
+
+test('pressing like two times is registered correctly', async () => {
+  const blog = {
+    title: 'How to test react?',
+    author: 'Kerkko Koskinen',
+    likes: 10,
+    url: 'bestblog.com',
+    user: {
+      username: 'juho87'
+    }
+  }
+
+  const mockHandler = jest.fn()
+
+  render(
+    <Blog blog={blog} handleAddLike={mockHandler} handleRemove={mockHandler} username={'juho87'} />
+  )
+
+  const user = userEvent.setup()
+  const viewMoreButton = screen.getByText('view more')
+  await user.click(viewMoreButton)
+  const likeButton = screen.getByText('like')
+  await user.click(likeButton)
+  await user.click(likeButton)
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
+})
