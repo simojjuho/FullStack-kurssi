@@ -4,9 +4,9 @@ import PropTypes from 'prop-types'
 const Blog = ({ blog, handleAddLike, handleRemove, username }) => {
   Blog.propTypes = ({
     blog: PropTypes.object.isRequired,
-    handleAddLike: PropTypes.func.isRequired,
-    handleRemove: PropTypes.func.isRequired,
-    username: PropTypes.string.isRequired
+    handleAddLike: PropTypes.func,
+    handleRemove: PropTypes.func,
+    username: PropTypes.string
   })
 
   const [showMore, setShowMore] = useState(false)
@@ -47,7 +47,7 @@ const Blog = ({ blog, handleAddLike, handleRemove, username }) => {
 
   if(showMore) {
     return (
-      <div style={blogStyle}>
+      <div className='blogMoreInfo blog' style={blogStyle}>
         Title: {blog.title}<button onClick={() => toggleVisibility()}>view less</button><br />
         Author: {blog.author}<br />
         Likes: {blog.likes}<br />
@@ -58,7 +58,7 @@ const Blog = ({ blog, handleAddLike, handleRemove, username }) => {
     )
   } else {
     return (
-      <div style={blogStyle}>
+      <div className='blogLessInfo blog' style={blogStyle}>
         {blog.title} {blog.author}
         <button onClick={() => toggleVisibility()}>view more</button>
       </div>
