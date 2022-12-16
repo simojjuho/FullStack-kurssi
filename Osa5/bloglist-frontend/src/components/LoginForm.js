@@ -27,18 +27,21 @@ const LoginForm = ({
   return (
     <form onSubmit={logIn}>
       <input
+        id='username'
         type='text'
         value={username}
         name='Username'
         onChange={({ target }) => setUsername(target.value)}
       />
       <input
+        id='password'
         type='password'
         value={password}
         name='Password'
         onChange={({ target }) => setPassword(target.value)}
       />
       <button
+        id='loginSubmit'
         type='submit'
       >
                 Login
