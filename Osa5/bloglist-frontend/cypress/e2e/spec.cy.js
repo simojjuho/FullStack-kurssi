@@ -23,4 +23,11 @@ describe('Blog app', function() {
     cy.get('#loginSubmit').click()
     cy.contains('root logged in')
   })
+
+  it('not succesful with wrong credentials', function() {
+    cy.get('#username').type('juho')
+    cy.get('#password').type('secret')
+    cy.get('#loginSubmit').click()
+    cy.contains('Unauthorized, wrong username and/or password')
+  })
 })
