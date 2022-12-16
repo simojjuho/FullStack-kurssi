@@ -21,6 +21,7 @@ const CreateBlogForm = ({
   return (
     <form onSubmit={addBlog}>
       <input
+        id='titleInput'
         type='text'
         value={title}
         name='Title'
@@ -28,6 +29,7 @@ const CreateBlogForm = ({
         placeholder = 'blog title'
       />
       <input
+        id='authorInput'
         type='text'
         value={author}
         name='Author'
@@ -35,13 +37,14 @@ const CreateBlogForm = ({
         placeholder = 'blog author'
       />
       <input
+        id='urlInput'
         type='text'
         value={url}
         name='Url'
         onChange={({ target }) => setUrl( target.value )}
         placeholder = 'blog url'
       />
-      <button type='submit'>create</button>
+      <button id='createBlogButton' type='submit'>create</button>
     </form>
   )
 }
