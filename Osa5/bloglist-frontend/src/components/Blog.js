@@ -41,17 +41,17 @@ const Blog = ({ blog, handleAddLike, handleRemove, username }) => {
 
   const deleteButton = () => {
     return username === blog.user.username
-      ? <button onClick={() => deleteBlog()}>delete</button>
+      ? <button className='deleteButton' onClick={() => deleteBlog()}>delete</button>
       : null
   }
 
   if(showMore) {
     return (
       <div className='blogMoreInfo blog' style={blogStyle}>
-        Title: {blog.title}<button onClick={() => toggleVisibility()}>view less</button><br />
+        Title: {blog.title}<button className='viewLessButton' onClick={() => toggleVisibility()}>view less</button><br />
         Author: {blog.author}<br />
         Likes: {blog.likes}<br />
-        <button onClick={() => addLike(blog.id)}>like</button><br />
+        <button className='addLike' onClick={() => addLike(blog.id)}>like</button><br />
         Url: {blog.url}<br />
         {deleteButton()}
       </div>
@@ -60,7 +60,7 @@ const Blog = ({ blog, handleAddLike, handleRemove, username }) => {
     return (
       <div className='blogLessInfo blog' style={blogStyle}>
         {blog.title} {blog.author}
-        <button onClick={() => toggleVisibility()}>view more</button>
+        <button className='viewMoreButton' onClick={() => toggleVisibility()}>view more</button>
       </div>
     )
   }
