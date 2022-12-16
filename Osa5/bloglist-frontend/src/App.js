@@ -88,7 +88,7 @@ const App = () => {
   const handleAddLike = async (newBlog, id) => {
     try {
       const result = await blogService.update(newBlog, id)
-      sortBlogs()
+      setBlogs(sortBlogs(blogs))
       setInfoMsg('Tykkäys lisätty')
       setTimeout(() => {
         setInfoMsg(null)

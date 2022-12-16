@@ -51,6 +51,7 @@ describe('Blog app', function() {
 
   describe('One blog created', function(){
     beforeEach(function(){
+      //These should be done by some other way than these test methods. Will have to learn those too at some point.
       cy.get('#username').type('root')
       cy.get('#password').type('secret')
       cy.get('#loginSubmit').click()
@@ -69,6 +70,33 @@ describe('Blog app', function() {
     it('deletion possible for the one who created the blog', function(){
       cy.get('.deleteButton').click()
       cy.expect('#blogList').to.not.contain('Kekkonen lives!')
+    })
+  })
+  describe('Two blogs created', function() {
+    beforeEach(function(){
+      //These should be done by some other way than these test methods. Will have to learn those too at some point.
+      cy.get('#username').type('root')
+      cy.get('#password').type('secret')
+      cy.get('#loginSubmit').click()
+      cy.get('#titleInput').type('Should be second!')
+      cy.get('#authorInput').type('Second')
+      cy.get('#urlInput').type('second.com/')
+      cy.get('#createBlogButton').click()
+      cy.get('#titleInput').type('Should be first!')
+      cy.get('#authorInput').type('First')
+      cy.get('#urlInput').type('first.com/')
+      cy.get('#createBlogButton').click()
+      cy.get('button.viewMoreButton').click()
+    })
+    it('The blog second should be first on the list when with more likes', function() {
+      cy.contains('Second')
+        .then(() => {
+          cy.get('.addLike').click()
+        })
+      cy.contains('First').get('.viewMoreButton').click()
+      cy.get('.blog:last').get('.addLike:last').click()
+      cy.get('.blog:last').get('.addLike:last').click()
+      cy.get('.blog:first').contains('First')
     })
   })
 })
