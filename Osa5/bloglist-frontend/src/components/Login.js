@@ -19,7 +19,7 @@ const Login = ({
 
 }) => {
   Login.propTypes = ({
-    user: PropTypes.object.isRequired,
+    user: PropTypes.object,
     blogs: PropTypes.array.isRequired,
     handleLogin: PropTypes.func.isRequired,
     handleCreate: PropTypes.func.isRequired,
@@ -30,21 +30,21 @@ const Login = ({
 
   if (user === null) {
     return (
-      <div>
+      <div id='loginVisible'>
         <h2>Login</h2>
         <ErrorMessage
           errorMsg={errorMsg}
         />
-        <Togglable buttonLabel={'login'}>
-          <LoginForm
-            handleLogin={handleLogin}
-          />
-        </Togglable>
+
+        <LoginForm
+          handleLogin={handleLogin}
+        />
+
       </div>
     )
   }
   return (
-    <div>
+    <div id='blogList'>
       <InfoMessage
         infoMsg={infoMsg}
       />
