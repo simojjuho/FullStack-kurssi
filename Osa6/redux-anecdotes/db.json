@@ -3,7 +3,7 @@
     {
       "content": "If it hurts, do it more often",
       "id": "47145",
-      "votes": 0
+      "votes": 1
     },
     {
       "content": "Adding manpower to a late software project makes it later!",
@@ -42,8 +42,18 @@
     },
     {
       "content": "With Redux Thunk working is?",
-      "votes": 2,
+      "votes": 4,
       "id": "zliILhb"
+    },
+    {
+      "content": "If it doesn't hurt, it doesn't hurt.",
+      "votes": 0,
+      "id": "v6Mv7kt"
+    },
+    {
+      "content": "Do not stop until you're proud.",
+      "votes": 0,
+      "id": "nTEQzvP"
     }
   ]
 }

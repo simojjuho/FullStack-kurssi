@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { addVote } from '../reducers/anecdoteReducer'
+import { newNotification } from '../reducers/notificationReducer'
 import Filter from './Filter'
 
 const AnecdoteList = () => {
@@ -16,17 +17,14 @@ const AnecdoteList = () => {
     
     const dispatch = useDispatch()
 
-    const vote = (id, votes) => {
-        console.log('vote', id)
+    const vote = (anecdote) => {
+        console.log('vote', anecdote.id)
         const dataToUpdate = {
-            ...anecdotes.find(anecdote => anecdote.id === id),
-            votes: votes + 1
+            ...anecdote,
+            votes: anecdote.votes + 1
         }
-        dispatch(addVote(id, dataToUpdate))
-        /* dispatch(createNotification(`You voted for anecdote: "${content}"`))
-        setTimeout(()=>{
-            dispatch(createNotification(null))
-        }, 5000) */
+        dispatch(addVote(anecdote.id, dataToUpdate))
+        dispatch(newNotification(`You voted '${anecdote.content}'`, 5))
     }
 
     return(
@@ -40,7 +38,7 @@ const AnecdoteList = () => {
                 </div>
                 <div>
                     has {anecdote.votes}
-                    <button onClick={() => vote(anecdote.id, anecdote.votes)}>vote</button>
+                    <button onClick={() => vote(anecdote)}>vote</button>
                 </div>
             </div>)}
         </div>
