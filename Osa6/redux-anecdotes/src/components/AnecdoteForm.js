@@ -10,6 +10,7 @@ const AnecodteForm = () => {
         const content = event.target.content.value
         event.target.content.value = ''
         dispatch(createAnecdote(content))
+        //Second argument is optional. It can be left empty, default is 10s
         dispatch(newNotification(`New anecdote create: '${content}'`, 5))
       }
 
