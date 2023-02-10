@@ -1,11 +1,26 @@
-const AnecdoteForm = ({ newMutation }) => {
+import { useContext } from "react"
+import NotificationContext from "../NotificationContext"
 
+const AnecdoteForm = ({ newMutation }) => {
+  const [notification, dispatch] = useContext(NotificationContext)
   const onCreate = (event) => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
-    newMutation.mutate({ content, votes: 0 })
-    console.log(`Creating new anecdote: '${content}'`)
+    if(content.length > 5) {
+      newMutation.mutate({ content, votes: 0 })
+      console.log(`Creating new anecdote: '${content}'`)
+      dispatch({ type: "CREATE", payload: content })
+      setTimeout(()=>{
+        dispatch({type: "EMPTY"})
+        },5000)
+    } else {
+      dispatch({ type: "ERROR",  payload: "Anecdote is too short. Length must be 5 or more."})
+      setTimeout(()=>{
+        dispatch({type: "EMPTY"})
+        },5000)
+    }
+    
 }
 
   return (

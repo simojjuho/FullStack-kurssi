@@ -1,7 +1,17 @@
 import { createContext, useReducer } from 'react'
 
 const notificationReducer = (state, action) => {
-    return action.payload
+    // eslint-disable-next-line default-case
+    switch(action.type) {
+        case "VOTE":
+            return `Voted for "${action.payload}".`
+        case "CREATE":
+            return `Created new anecdote "${action.payload}".`
+        case "EMPTY":
+            return null
+        case "ERROR":
+            return action.payload
+    }
 }
 
 const NotificationContext = createContext()
