@@ -6,24 +6,10 @@ import { useDispatch } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [errorMsg, setErrorMsg] = useState(null)
   const [infoMsg, setInfoMsg] = useState(null)
   const dispatch = useDispatch()
-
-  //One function to handle communication with blogService.getAll()
-  const getAllBlogs = async () => {
-    const newBlogs = await blogService.getAll()
-    const blogsSorted = sortBlogs(newBlogs)
-    setBlogs(blogsSorted)
-  }
-
-  const sortBlogs = (blogs) => {
-    return [...blogs].sort((a, b) => {
-      return b.likes - a.likes
-    })
-  }
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -66,7 +52,6 @@ const App = () => {
   const handleCreate = async (newBlog) => {
     try {
       const result = await blogService.create(newBlog)
-      getAllBlogs()
       console.log(result)
       setInfoMsg('Blog succesfully created!')
       setTimeout(() => {
@@ -80,28 +65,9 @@ const App = () => {
     }
   }
 
-  const handleAddLike = async (newBlog, id) => {
-    try {
-      const result = await blogService.update(newBlog, id)
-      setBlogs(sortBlogs(blogs))
-      setInfoMsg('Like added!')
-      setTimeout(() => {
-        setInfoMsg(null)
-      }, 5000)
-      console.log(result)
-    } catch (exception) {
-      console.log(exception)
-      setErrorMsg(exception)
-      setTimeout(() => {
-        setErrorMsg(null)
-      }, 5000)
-    }
-  }
-
   const handleRemove = async (id) => {
     try {
       const result = await blogService.remove(id)
-      getAllBlogs()
       console.log('Blog removal status:', result.status)
       setInfoMsg('Blog removed')
       setTimeout(() => {
@@ -124,7 +90,6 @@ const App = () => {
       logout={logout}
       errorMsg={errorMsg}
       infoMsg={infoMsg}
-      handleAddLike={handleAddLike}
       handleRemove={handleRemove}
     />
   )

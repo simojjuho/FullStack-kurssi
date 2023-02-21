@@ -5,27 +5,25 @@ import InfoMessage from './InfoMessage'
 import LoginForm from './LoginForm'
 import Togglable from './Togglable'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
 const Login = ({
   user,
-  blogs,
   handleLogin,
   handleCreate,
   logout,
   errorMsg,
   infoMsg,
-  handleAddLike,
   handleRemove,
 }) => {
   Login.propTypes = {
     user: PropTypes.object,
-    blogs: PropTypes.array.isRequired,
     handleLogin: PropTypes.func.isRequired,
     handleCreate: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
-    handleAddLike: PropTypes.func.isRequired,
     handleRemove: PropTypes.func.isRequired,
   }
+  const blogs = useSelector((state) => state.blogs)
 
   if (user === null) {
     return (
@@ -47,7 +45,6 @@ const Login = ({
         <Blog
           key={blog.id}
           blog={blog}
-          handleAddLike={handleAddLike}
           handleRemove={handleRemove}
           username={user.username}
         />

@@ -1,16 +1,17 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { addLike } from '../reducers/blogReducer'
+import { useDispatch } from 'react-redux'
 
-const Blog = ({ blog, handleAddLike, handleRemove, username }) => {
+const Blog = ({ blog, handleRemove, username }) => {
   Blog.propTypes = {
     blog: PropTypes.object.isRequired,
-    handleAddLike: PropTypes.func,
     handleRemove: PropTypes.func,
     username: PropTypes.string,
   }
 
+  const dispatch = useDispatch()
   const [showMore, setShowMore] = useState(false)
-
   const toggleVisibility = () => {
     setShowMore(!showMore)
   }
@@ -22,17 +23,16 @@ const Blog = ({ blog, handleAddLike, handleRemove, username }) => {
     marginBottom: '5px',
   }
 
-  const addLike = () => {
-    blog.likes += 1
-    handleAddLike(
-      {
+  const handleLike = (id) => {
+    dispatch(
+      addLike({
         user: blog.user.id,
         title: blog.title,
         author: blog.author,
-        likes: blog.likes,
+        likes: blog.likes + 1,
         url: blog.url,
-      },
-      blog.id
+        id,
+      })
     )
   }
 
@@ -62,7 +62,7 @@ const Blog = ({ blog, handleAddLike, handleRemove, username }) => {
         <br />
         Likes: {blog.likes}
         <br />
-        <button className="addLike" onClick={() => addLike(blog.id)}>
+        <button className="addLike" onClick={() => handleLike(blog.id)}>
           like
         </button>
         <br />
