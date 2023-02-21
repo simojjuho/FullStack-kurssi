@@ -21,8 +21,6 @@ const Togglable = (props) => {
       </div>
     </div>
   )
-
-
 }
 
 export default Togglable

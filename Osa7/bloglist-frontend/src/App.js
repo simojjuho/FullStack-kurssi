@@ -9,6 +9,7 @@ const App = () => {
   const [errorMsg, setErrorMsg] = useState(null)
   const [infoMsg, setInfoMsg] = useState(null)
 
+  //Testing if prettier will wrap this comment into smaller chunks. Let's see, what happens. I'm pretty excited, are you? Oh boy, oh boy, I'm so excited that I just can't hide it!!!
 
   //One function to handle communication with blogService.getAll()
   const getAllBlogs = async () => {
@@ -17,21 +18,20 @@ const App = () => {
     await setBlogs(blogsSorted)
   }
 
-  const sortBlogs = blogs => {
-    return ([...blogs].sort((a,b) => {
+  const sortBlogs = (blogs) => {
+    return [...blogs].sort((a, b) => {
       return b.likes - a.likes
-    }))
+    })
   }
 
   useEffect(() => {
-    blogService.getAll()
-      .then(blogs => {
-        setBlogs(blogs.sort((a,b) => {
+    blogService.getAll().then((blogs) => {
+      setBlogs(
+        blogs.sort((a, b) => {
           return b.likes - a.likes
-        }))
-      })
-
-
+        })
+      )
+    })
   }, [])
 
   //Checks on reload if a user logged in, checks from the window.localStorage
@@ -44,7 +44,7 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async newLogin => {
+  const handleLogin = async (newLogin) => {
     try {
       const user = await loginService.login(newLogin)
       setUser(user)
@@ -68,7 +68,7 @@ const App = () => {
   }
 
   //Takes care of new blog creation
-  const handleCreate = async newBlog => {
+  const handleCreate = async (newBlog) => {
     try {
       const result = await blogService.create(newBlog)
       getAllBlogs()
@@ -89,7 +89,7 @@ const App = () => {
     try {
       const result = await blogService.update(newBlog, id)
       setBlogs(sortBlogs(blogs))
-      setInfoMsg('Tykkäys lisätty')
+      setInfoMsg('Like added!')
       setTimeout(() => {
         setInfoMsg(null)
       }, 5000)
@@ -99,16 +99,16 @@ const App = () => {
       setErrorMsg(exception)
       setTimeout(() => {
         setErrorMsg(null)
-      },5000)
+      }, 5000)
     }
   }
 
-  const handleRemove = async id => {
+  const handleRemove = async (id) => {
     try {
       const result = await blogService.remove(id)
       getAllBlogs()
       console.log('Blog removal status:', result.status)
-      setInfoMsg('Blogi poistettu')
+      setInfoMsg('Blog removed')
       setTimeout(() => {
         setInfoMsg(null)
       }, 5000)
@@ -117,7 +117,7 @@ const App = () => {
       setErrorMsg(exception)
       setTimeout(() => {
         setErrorMsg(null)
-      },5000)
+      }, 5000)
     }
   }
 

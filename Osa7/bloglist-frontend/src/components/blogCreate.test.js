@@ -7,7 +7,7 @@ import CreateBlogForm from './CreateBlogForm'
 test('createBlog is called with proper arguments', async () => {
   const handleCreate = jest.fn()
 
-  render(<CreateBlogForm handleCreate={handleCreate}/>)
+  render(<CreateBlogForm handleCreate={handleCreate} />)
 
   const inputAuthor = screen.getByPlaceholderText('blog author')
   const inputTitle = screen.getByPlaceholderText('blog title')

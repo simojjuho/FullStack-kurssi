@@ -4,13 +4,12 @@ const InfoMessage = ({ infoMsg }) => {
     border: 'grey 2px solid',
     padding: '10px 5px 10px 5px',
     textAlign: 'center',
-    maxWidth: '150px'
+    maxWidth: '150px',
   }
 
   if (infoMsg) {
-    return (
-      <p style={infoStyle}>{infoMsg}</p>
-    )}
+    return <p style={infoStyle}>{infoMsg}</p>
+  }
 
   return null
 }

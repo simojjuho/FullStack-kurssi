@@ -9,7 +9,7 @@ test('renders automatically title and author, not likes and url', async () => {
     title: 'How to test react?',
     author: 'Kerkko Koskinen',
     likes: 10,
-    url: 'bestblog.com'
+    url: 'bestblog.com',
   }
 
   const { container } = render(<Blog blog={blog} username={'juho87'} />)
@@ -25,14 +25,19 @@ test('also the likes and url render when view more is clicked', async () => {
     likes: 10,
     url: 'bestblog.com',
     user: {
-      username: 'juho87'
-    }
+      username: 'juho87',
+    },
   }
 
   const mockHandler = jest.fn()
 
   const { container } = render(
-    <Blog blog={blog} handleAddLike={mockHandler} handleRemove={mockHandler} username={'juho87'} />
+    <Blog
+      blog={blog}
+      handleAddLike={mockHandler}
+      handleRemove={mockHandler}
+      username={'juho87'}
+    />
   )
 
   const user = userEvent.setup()
@@ -51,14 +56,19 @@ test('pressing like two times is registered correctly', async () => {
     likes: 10,
     url: 'bestblog.com',
     user: {
-      username: 'juho87'
-    }
+      username: 'juho87',
+    },
   }
 
   const mockHandler = jest.fn()
 
   render(
-    <Blog blog={blog} handleAddLike={mockHandler} handleRemove={mockHandler} username={'juho87'} />
+    <Blog
+      blog={blog}
+      handleAddLike={mockHandler}
+      handleRemove={mockHandler}
+      username={'juho87'}
+    />
   )
 
   const user = userEvent.setup()

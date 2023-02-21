@@ -1,18 +1,16 @@
 import { useState } from 'react'
 
-const CreateBlogForm = ({
-  handleCreate
-}) => {
+const CreateBlogForm = ({ handleCreate }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
-  const addBlog = event => {
+  const addBlog = (event) => {
     event.preventDefault()
     handleCreate({
       title,
       author,
-      url
+      url,
     })
     setAuthor('')
     setTitle('')
@@ -21,30 +19,32 @@ const CreateBlogForm = ({
   return (
     <form onSubmit={addBlog}>
       <input
-        id='titleInput'
-        type='text'
+        id="titleInput"
+        type="text"
         value={title}
-        name='Title'
+        name="Title"
         onChange={({ target }) => setTitle(target.value)}
-        placeholder = 'blog title'
+        placeholder="blog title"
       />
       <input
-        id='authorInput'
-        type='text'
+        id="authorInput"
+        type="text"
         value={author}
-        name='Author'
-        onChange={({ target }) => setAuthor( target.value )}
-        placeholder = 'blog author'
+        name="Author"
+        onChange={({ target }) => setAuthor(target.value)}
+        placeholder="blog author"
       />
       <input
-        id='urlInput'
-        type='text'
+        id="urlInput"
+        type="text"
         value={url}
-        name='Url'
-        onChange={({ target }) => setUrl( target.value )}
-        placeholder = 'blog url'
+        name="Url"
+        onChange={({ target }) => setUrl(target.value)}
+        placeholder="blog url"
       />
-      <button id='createBlogButton' type='submit'>create</button>
+      <button id="createBlogButton" type="submit">
+        create
+      </button>
     </form>
   )
 }
