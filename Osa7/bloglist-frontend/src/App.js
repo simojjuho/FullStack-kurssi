@@ -2,20 +2,21 @@ import { useState, useEffect } from 'react'
 import Login from './components/Login'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { useDispatch } from 'react-redux'
+import { initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [errorMsg, setErrorMsg] = useState(null)
   const [infoMsg, setInfoMsg] = useState(null)
-
-  //Testing if prettier will wrap this comment into smaller chunks. Let's see, what happens. I'm pretty excited, are you? Oh boy, oh boy, I'm so excited that I just can't hide it!!!
+  const dispatch = useDispatch()
 
   //One function to handle communication with blogService.getAll()
   const getAllBlogs = async () => {
     const newBlogs = await blogService.getAll()
     const blogsSorted = sortBlogs(newBlogs)
-    await setBlogs(blogsSorted)
+    setBlogs(blogsSorted)
   }
 
   const sortBlogs = (blogs) => {
@@ -25,13 +26,7 @@ const App = () => {
   }
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => {
-      setBlogs(
-        blogs.sort((a, b) => {
-          return b.likes - a.likes
-        })
-      )
-    })
+    dispatch(initializeBlogs())
   }, [])
 
   //Checks on reload if a user logged in, checks from the window.localStorage
@@ -124,7 +119,6 @@ const App = () => {
   return (
     <Login
       user={user}
-      blogs={blogs}
       handleLogin={handleLogin}
       handleCreate={handleCreate}
       logout={logout}
