@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import blogs from '../services/blogs'
+import { newErrorMsg, newInfoMsg } from './notificationReducer'
 
 const blogSlice = createSlice({
   name: 'blogs',
@@ -12,7 +13,7 @@ const blogSlice = createSlice({
       return blogsSorted
     },
     appendBlog(state, action) {
-      state.push(action.payload)
+      return state.concat(action.payload)
     },
     modifyLikedBlog(state, action) {
       const blogsWithNewLike = state.map((blog) => {
@@ -22,12 +23,18 @@ const blogSlice = createSlice({
         return b.likes - a.likes
       })
     },
+    removeBlog(state, action) {
+      return state.filter((blog) => {
+        return blog.id !== action.payload
+      })
+    },
   },
 })
 
 export const initializeBlogs = () => {
   return async (dispatch) => {
     const blogsFromServer = await blogs.getAll()
+    console.log(blogsFromServer)
     dispatch(setBlogs(blogsFromServer))
   }
 }
@@ -39,5 +46,31 @@ export const addLike = (blog) => {
   }
 }
 
-export const { setBlogs, appendBlog, modifyLikedBlog } = blogSlice.actions
+export const addBlog = (blog) => {
+  return async (dispatch) => {
+    const newBlog = await blogs.create(blog)
+    console.log(newBlog)
+    dispatch(appendBlog(newBlog))
+  }
+}
+
+export const deleteBlog = (id) => {
+  return (dispatch) => {
+    blogs
+      .remove(id)
+      .then(() => {
+        dispatch(removeBlog(id))
+        dispatch(newInfoMsg('The blog was deleted!'))
+      })
+      .catch(() => {
+        dispatch(removeBlog(id))
+        dispatch(
+          newErrorMsg('Error with the server. Blog removed from the list..')
+        )
+      })
+  }
+}
+
+export const { setBlogs, appendBlog, modifyLikedBlog, removeBlog } =
+  blogSlice.actions
 export default blogSlice.reducer

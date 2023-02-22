@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
-import { addLike } from '../reducers/blogReducer'
+import { addLike, deleteBlog } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 
-const Blog = ({ blog, handleRemove, username }) => {
+const Blog = ({ blog, username }) => {
   Blog.propTypes = {
     blog: PropTypes.object.isRequired,
-    handleRemove: PropTypes.func,
     username: PropTypes.string,
   }
 
@@ -36,15 +35,15 @@ const Blog = ({ blog, handleRemove, username }) => {
     )
   }
 
-  const deleteBlog = () => {
+  const handleDelete = () => {
     if (window.confirm(`Want to delete ${blog.author}: ${blog.title}?`)) {
-      handleRemove(blog.id)
+      dispatch(deleteBlog(blog.id))
     }
   }
 
   const deleteButton = () => {
     return username === blog.user.username ? (
-      <button className="deleteButton" onClick={() => deleteBlog()}>
+      <button className="deleteButton" onClick={() => handleDelete()}>
         delete
       </button>
     ) : null
