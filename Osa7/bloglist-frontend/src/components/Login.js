@@ -3,22 +3,22 @@ import CreateBlogForm from './CreateBlogForm'
 import Notification from './Notification'
 import LoginForm from './LoginForm'
 import Togglable from './Togglable'
-import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { logoutUser } from '../reducers/userReducer'
 
-const Login = ({ user, handleLogin, logout }) => {
-  Login.propTypes = {
-    user: PropTypes.object,
-    handleLogin: PropTypes.func.isRequired,
-    logout: PropTypes.func.isRequired,
-  }
+const Login = () => {
+  const dispatch = useDispatch()
   const blogs = useSelector((state) => state.blogs)
+  const user = useSelector((state) => state.user)
+  const logout = () => {
+    dispatch(logoutUser())
+  }
 
   if (user === null) {
     return (
       <div id="loginVisible">
         <h2>Login</h2>
-        <LoginForm handleLogin={handleLogin} />
+        <LoginForm />
       </div>
     )
   }
