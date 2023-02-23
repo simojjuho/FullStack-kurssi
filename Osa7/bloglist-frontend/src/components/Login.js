@@ -18,6 +18,7 @@ const Login = () => {
     return (
       <div id="loginVisible">
         <h2>Login</h2>
+        <Notification />
         <LoginForm />
       </div>
     )

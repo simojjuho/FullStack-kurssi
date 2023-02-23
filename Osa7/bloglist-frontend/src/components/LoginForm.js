@@ -7,7 +7,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState('')
   const dispatch = useDispatch()
 
-  const logIn = (event) => {
+  const handleLogin = (event) => {
     event.preventDefault()
     console.log('Logging in with', username, password)
     const newLogin = {
@@ -21,7 +21,7 @@ const LoginForm = () => {
   }
 
   return (
-    <form onSubmit={logIn}>
+    <form onSubmit={handleLogin}>
       <input
         id="username"
         type="text"

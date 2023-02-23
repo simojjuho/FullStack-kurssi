@@ -34,7 +34,6 @@ const blogSlice = createSlice({
 export const initializeBlogs = () => {
   return async (dispatch) => {
     const blogsFromServer = await blogs.getAll()
-    console.log(blogsFromServer)
     dispatch(setBlogs(blogsFromServer))
   }
 }
