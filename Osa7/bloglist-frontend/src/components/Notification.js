@@ -4,8 +4,6 @@ const Notification = () => {
   const notification = useSelector((state) => state.notification)
 
   if (notification.payload) {
-    console.log(notification.payload)
-
     const chooseStyle = () => {
       if (notification.type === 'info') {
         return {
