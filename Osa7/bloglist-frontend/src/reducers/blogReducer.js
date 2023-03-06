@@ -28,6 +28,11 @@ const blogSlice = createSlice({
         return blog.id !== action.payload
       })
     },
+    setComment(state, action) {
+      return state.map((blog) => {
+        return blog.id === action.payload.id ? action.payload : blog
+      })
+    },
   },
 })
 
@@ -70,6 +75,13 @@ export const deleteBlog = (id) => {
   }
 }
 
-export const { setBlogs, appendBlog, modifyLikedBlog, removeBlog } =
+export const addComment = (id, comment) => {
+  return async (dispatch) => {
+    const result = await blogs.createComment(id, comment)
+    dispatch(setComment(result))
+  }
+}
+
+export const { setBlogs, appendBlog, modifyLikedBlog, removeBlog, setComment } =
   blogSlice.actions
 export default blogSlice.reducer

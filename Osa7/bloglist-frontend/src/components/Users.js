@@ -6,11 +6,11 @@ import User from './User'
 
 const UsersList = () => {
   const [users, setUsers] = useState([])
-  const user = useSelector((state) => state.user)
+  const loggedInUser = useSelector((state) => state.user)
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (user === null) navigate('/')
+    if (loggedInUser === null) navigate('/')
     getUsers().then((userList) => setUsers(userList))
   }, [])
 

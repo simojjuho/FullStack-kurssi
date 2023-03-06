@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { newInfoMsg } from '../reducers/notificationReducer'
-import { logoutUser } from '../reducers/userReducer'
+import { logoutUser } from '../reducers/loggedUserReducer'
 
 const LoggedIn = ({ user }) => {
   const navigate = useNavigate()
