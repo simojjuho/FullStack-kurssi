@@ -4,12 +4,15 @@ import blogService from './services/blogs'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { loggedIn } from './reducers/loggedUserReducer'
-import { Link, Route, Routes, useMatch } from 'react-router-dom'
+import { Route, Routes, useMatch } from 'react-router-dom'
 import UsersList from './components/Users'
 import LoggedIn from './components/LoggedIn'
 import UserView from './components/UserView'
 import { initializeUsers } from './reducers/usersReducer'
 import BlogView from './components/BlogView'
+import Navbar from 'react-bootstrap/Navbar'
+import Nav from 'react-bootstrap/Nav'
+import Container from 'react-bootstrap/Container'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -49,15 +52,21 @@ const App = () => {
   }
 
   return (
-    <div>
-      <div>
-        <Link style={linkStyle} to="/">
-          blogs
-        </Link>
-        <Link style={linkStyle} to="/users">
-          users
-        </Link>
-      </div>
+    <div className="container">
+      <Navbar bg="light" variant="light" expand="sm">
+        <Container>
+          <Navbar.Brand href="#home">Bloglist App</Navbar.Brand>
+          <Navbar.Collapse id="basic-navbar-nav"></Navbar.Collapse>
+          <Nav className="me-auto">
+            <Nav.Link style={linkStyle} href="/">
+              blogs
+            </Nav.Link>
+            <Nav.Link style={linkStyle} href="/users">
+              users
+            </Nav.Link>
+          </Nav>
+        </Container>
+      </Navbar>
       {getLogout()}
 
       <Routes>

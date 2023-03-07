@@ -14,14 +14,14 @@ export const newInfoMsg = (notification) => {
   return async (dispatch) => {
     dispatch(
       setNotification({
-        type: 'info',
+        type: 'success',
         payload: notification,
       })
     )
     setTimeout(() => {
       dispatch(
         setNotification({
-          type: 'info',
+          type: 'success',
           payload: null,
         })
       )
@@ -33,14 +33,14 @@ export const newErrorMsg = (notification) => {
   return async (dispatch) => {
     dispatch(
       setNotification({
-        type: 'error',
+        type: 'danger',
         payload: notification,
       })
     )
     setTimeout(() => {
       dispatch(
         setNotification({
-          type: 'error',
+          type: 'danger',
           payload: null,
         })
       )

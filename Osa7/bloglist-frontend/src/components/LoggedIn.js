@@ -2,6 +2,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { newInfoMsg } from '../reducers/notificationReducer'
 import { logoutUser } from '../reducers/loggedUserReducer'
+import Button from 'react-bootstrap/Button'
 
 const LoggedIn = ({ user }) => {
   const navigate = useNavigate()
@@ -12,9 +13,9 @@ const LoggedIn = ({ user }) => {
     dispatch(newInfoMsg('Logged out!'))
   }
   return (
-    <div>
+    <div className="text-right">
       <p>{user.name} logged in</p>
-      <button onClick={() => logout()}>logout</button>
+      <Button onClick={() => logout()}>logout</Button>
     </div>
   )
 }

@@ -1,33 +1,12 @@
 import { useSelector } from 'react-redux'
+import Alert from 'react-bootstrap/Alert'
 
 const Notification = () => {
   const notification = useSelector((state) => state.notification)
 
-  if (notification.payload) {
-    const chooseStyle = () => {
-      if (notification.type === 'info') {
-        return {
-          backgroundColor: '#77FF77',
-          border: 'grey 2px solid',
-          padding: '10px 5px 10px 5px',
-          textAlign: 'center',
-          maxWidth: '150px',
-        }
-      } else {
-        return {
-          backgroundColor: '#FF7777',
-          border: 'grey 2px solid',
-          padding: '10px 5px 10px 5px',
-          textAlign: 'center',
-          maxWidth: '150px',
-        }
-      }
-    }
+  if (!notification.payload) return null
 
-    return <p style={chooseStyle()}>{notification.payload}</p>
-  }
-
-  return null
+  return <Alert variant={notification.type}>{notification.payload}</Alert>
 }
 
 export default Notification

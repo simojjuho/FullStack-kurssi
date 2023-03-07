@@ -1,25 +1,34 @@
 import { useState } from 'react'
+import Button from 'react-bootstrap/Button'
+import Stack from 'react-bootstrap/Stack'
+import Collapse from 'react-bootstrap/Collapse'
 
 const Togglable = (props) => {
   const [visible, setVisible] = useState(true)
 
-  const toggleVisibility = () => {
-    setVisible(!visible)
+  const buttonText = () => {
+    if (!visible) return 'Add new'
+    else return 'Cancel'
   }
 
-  const showWhenVisible = { display: visible ? '' : 'none' }
-  const hideWhenVisible = { display: visible ? 'none' : '' }
-
   return (
-    <div>
-      <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>{props.buttonLabel}</button>
-      </div>
-      <div style={showWhenVisible}>
-        {props.children}
-        <button onClick={toggleVisibility}>Cancel</button>
-      </div>
-    </div>
+    <>
+      <Button
+        onClick={() => setVisible(!visible)}
+        aria-controls="collapse-element"
+        aria-expanded={visible}
+      >
+        {buttonText()}
+      </Button>
+      <Collapse in={visible}>
+        <div id="collapse-element">
+          <Stack direction="horizontal" gap="5">
+            {props.heading}
+          </Stack>
+          {props.children}
+        </div>
+      </Collapse>
+    </>
   )
 }
 

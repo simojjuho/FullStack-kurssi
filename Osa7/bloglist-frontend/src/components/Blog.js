@@ -7,19 +7,15 @@ const Blog = ({ blog }) => {
     username: PropTypes.string,
   }
 
-  const blogStyle = {
-    border: '2px black solid',
-    maxWidth: '250px',
-    padding: '10px',
-    marginBottom: '5px',
-  }
-
   return (
-    <div className="blogLessInfo blog" style={blogStyle}>
-      <Link to={`/blogs/${blog.id}`}>
-        {blog.title} {blog.author}
-      </Link>
-    </div>
+    <tr>
+      <td>
+        <Link to={`/blogs/${blog.id}`}>
+          {blog.title} {blog.author}
+        </Link>
+      </td>
+      <td>{blog.user.name}</td>
+    </tr>
   )
 }
 
