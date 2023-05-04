@@ -9,12 +9,15 @@ const blogSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  comments: [String],
+  comments: [{ content: String }],
 });
 
 blogSchema.set("toJSON", {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
+    /*     returnedObject.comments = returnedObject.comments.map((comment) => {
+      return { ...comment, _id: comment._id.toString() };
+    }); */
     delete returnedObject._id;
     delete returnedObject.__v;
   },

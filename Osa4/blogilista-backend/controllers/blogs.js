@@ -97,15 +97,19 @@ blogRouter.get("/:id/comments", async (req, res) => {
 
 blogRouter.post("/:id/comments", async (req, res) => {
   const content = req.body.content;
-  console.log("req:", req.body.content);
+  console.log("req:", content);
+  if (!content) {
+    return res.status(400).json({ error: "no comment to add" });
+  }
   const blog = await Blog.findById(req.params.id);
   if (!blog.comments) {
     blog = {
       ...blog,
-      comments: [content],
+      comments: [{ content }],
     };
   } else {
-    blog.comments = blog.comments.concat(content);
+    const id = blog.comments.length + 1;
+    blog.comments = blog.comments.concat({ content, id });
   }
   const result = await blog.save();
   res.status(201).json(result);
